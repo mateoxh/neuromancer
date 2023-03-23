@@ -1,14 +1,24 @@
 #include "ttable.h"
 
-static size_t mb_to_size(int mb)
+ttable_t::ttable_t(size_t mb)
 {
-	return (mb << 20) / sizeof(slot_t);
+	resize(mb);
+	clear();
 }
 
 ttable_t::ttable_t()
+	: ttable_t(128)
 {
-	table.resize(mb_to_size(128));
-	clear();
+}
+
+void ttable_t::resize(size_t mb)
+{
+	size_t size = (1024 * 1024 * mb) / sizeof(slot_t);
+
+	if (size > table.size())
+		table.resize(size);
+	else
+		table = std::vector<slot_t>(size);
 }
 
 size_t ttable_t::index(uint64_t hash) const

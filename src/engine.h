@@ -15,6 +15,7 @@ public:
 	void position(std::stringstream& ss);
 	void perft(std::stringstream& ss);
 	void go(std::stringstream& ss);
+	void setoption(std::stringstream& ss);
 
 private:
 	board_t board;

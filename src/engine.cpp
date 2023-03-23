@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <thread>
 #include "move.h"
 #include "engine.h"
@@ -59,6 +60,8 @@ void engine_t::start()
 			perft(ss);
 		else if (token == "go")
 			go(ss);
+		else if (token == "setoption")
+			setoption(ss);
 	}
 }
 
@@ -138,4 +141,19 @@ void engine_t::go(std::stringstream& ss)
 	std::thread([&] {
 		searcher.think(board);
 	}).detach();
+}
+
+void engine_t::setoption(std::stringstream& ss)
+{
+	std::string token;
+	int value;
+
+	ss >> token;
+	ss >> token;
+
+	std::transform(token.begin(), token.end(), token.begin(), ::tolower);
+	if (token == "hash") {
+		if (ss >> token >> value)
+			searcher.set_hash(std::max(value, 1));
+	}
 }

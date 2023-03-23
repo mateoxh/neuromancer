@@ -86,6 +86,11 @@ bool searcher_t::should_stop(int64_t nodes)
 	return stop;
 }
 
+void searcher_t::set_hash(size_t mb)
+{
+	tt.resize(mb);
+}
+
 void searcher_t::update_game_history(const board_t& board)
 {
 	game_history.push_back(board.hash());

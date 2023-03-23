@@ -19,9 +19,11 @@ struct slot_t {
 class ttable_t {
 public:
 	ttable_t();
+	ttable_t(size_t mb);
 
 	size_t index(uint64_t hash) const;
 
+	void resize(size_t mb);
 	void clear();
 	void store(uint64_t hash, move_t move, int score, int depth, int bound);
 	slot_t& get(uint64_t hash);

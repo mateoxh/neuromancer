@@ -30,6 +30,7 @@ public:
 	void prepare(long msec, int depth);
 	void request_stop();
 	bool should_stop(int64_t nodes);
+	void set_hash(size_t mb);
 
 	int negamax(board_t& board, info_t& info, pv_t& pv, int alpha, int beta, int depth, int ply, bool do_null);
 	int quiesce(board_t& board, info_t& info, int alpha, int beta);
