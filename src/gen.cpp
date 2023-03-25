@@ -14,7 +14,7 @@ void serialize_piece(const board_t& board, uint64_t filter, movelist_t& moves)
 		for (; att; att &= att - 1) {
 			to = std::countr_zero(att);
 
-			moves.emplace_back(move_t(from, to), 0);
+			moves.push_back({from, to});
 		}
 	}
 }
@@ -32,12 +32,12 @@ void serialize_pawns(uint64_t b, uint64_t filter, movelist_t& moves)
 		from = to - delta;
 
 		if (promotions) {
-			moves.emplace_back(move_t(from, to, queen ), 0);
-			moves.emplace_back(move_t(from, to, knight), 0);
-			moves.emplace_back(move_t(from, to, rook  ), 0);
-			moves.emplace_back(move_t(from, to, bishop), 0);
+			moves.push_back({from, to, queen });
+			moves.push_back({from, to, knight});
+			moves.push_back({from, to, rook  });
+			moves.push_back({from, to, bishop});
 		} else
-			moves.emplace_back(move_t(from, to), 0);
+			moves.push_back({from, to});
 	}
 }
 
@@ -98,13 +98,13 @@ void add_castle(const board_t& board, movelist_t& moves)
 		&& !board.is_square_attacked(kfrom + 1, !color)
 		&& !board.is_square_attacked(kfrom + 2, !color)
 		&& !(board.occupancy() & (1ull << (kfrom + 1) | 1ull << (kfrom + 2))))
-			moves.emplace_back(move_t(kfrom, kto_k), 0);
+			moves.push_back({kfrom, kto_k});
 
 		if (board.can_castle(qc)
 		&& !board.is_square_attacked(kfrom - 1, !color)
 		&& !board.is_square_attacked(kfrom - 2, !color)
 		&& !(board.occupancy() & (1ull << (kfrom - 1) | 1ull << (kfrom - 2) | 1ull << (kfrom - 3))))
-			moves.emplace_back(move_t(kfrom, kto_q), 0);
+			moves.push_back({kfrom, kto_q});
 	}
 }
 

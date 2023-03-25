@@ -1,11 +1,6 @@
 #include "move.h"
 #include "util.h"
 
-move_t::move_t()
-	: move(0)
-{
-}
-
 move_t::move_t(int from, int to)
 	: move(from | to << 6)
 {
@@ -29,16 +24,6 @@ int move_t::to() const
 int move_t::promo() const
 {
 	return move >> 12;
-}
-
-bool move_t::operator==(move_t other) const
-{
-	return move == other.move;
-}
-
-bool move_t::operator!=(move_t other) const
-{
-	return move != other.move;
 }
 
 std::ostream& operator<<(std::ostream& os, move_t move)

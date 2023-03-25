@@ -19,7 +19,7 @@ static int64_t perft_impl(board_t& board, int depth)
 	int64_t nodes = 0;
 	undo_t undo;
 
-	for (const auto& [move, score] : generate_all(board)) {
+	for (const auto& move : generate_all(board)) {
 		if (board.play(move, undo))
 			nodes += perft_impl(board, depth - 1);
 

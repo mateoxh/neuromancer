@@ -5,7 +5,7 @@
 
 class move_t {
 public:
-	move_t();
+	move_t() = default;
 	move_t(int from, int to);
 	move_t(int from, int to, int promo);
 
@@ -13,8 +13,8 @@ public:
 	int to() const;
 	int promo() const;
 
-	bool operator==(move_t other) const;
-	bool operator!=(move_t other) const;
+	bool operator==(const move_t&) const = default;
+	bool operator!=(const move_t&) const = default;
 
 private:
 	uint16_t move;
