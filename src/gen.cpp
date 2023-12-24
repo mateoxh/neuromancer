@@ -8,11 +8,11 @@ void serialize_piece(const board_t& board, uint64_t filter, movelist_t& moves)
 	int from, to;
 
 	for (; b; b &= b - 1) {
-		from = std::countr_zero(b);
+		from = lsb(b);
 		att  = single_attacks<piece>(from, board.occupancy()) & filter;
 
 		for (; att; att &= att - 1) {
-			to = std::countr_zero(att);
+			to = lsb(att);
 
 			moves.push_back({from, to});
 		}
@@ -28,7 +28,7 @@ void serialize_pawns(uint64_t b, uint64_t filter, movelist_t& moves)
 	int from, to;
 
 	for (; att; att &= att - 1) {
-		to = std::countr_zero(att);
+		to = lsb(att);
 		from = to - delta;
 
 		if (promotions) {

@@ -55,9 +55,9 @@ constexpr uint64_t sliding_attack(int s, uint64_t o)
 
 	const uint64_t lower = o & ((1ull << s) - 1);
 	const uint64_t upper = o & ~lower;
-	const uint64_t msb = 0x8000000000000000 >> std::countl_zero(lower | 1);
+	const uint64_t msbb = 0x8000000000000000 >> msb(lower | 1);
 
-	return (upper ^ (upper - msb)) & dir_masks[n_mask][s];
+	return (upper ^ (upper - msbb)) & dir_masks[n_mask][s];
 }
 
 template<int piece>

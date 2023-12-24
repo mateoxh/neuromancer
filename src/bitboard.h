@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <bit>
 #include <cstdint>
 
 constexpr int white = 0;
@@ -87,7 +86,8 @@ constexpr uint64_t fill(uint64_t b, uint64_t o = 0)
 	return (... | shift<delta>(occluded_fill<delta>(b, o)));
 }
 
-consteval auto make_table(auto&& func)
+template<typename Func>
+constexpr auto make_table(Func&& func)
 {
 	std::array<uint64_t, 64> ret = {};
 
@@ -96,3 +96,7 @@ consteval auto make_table(auto&& func)
 
 	return ret;
 }
+
+constexpr int popcount(uint64_t b) { return __builtin_popcountll(b); }
+constexpr int lsb(uint64_t b) { return __builtin_ctzll(b); }
+constexpr int msb(uint64_t b) { return __builtin_clzll(b); }

@@ -32,7 +32,7 @@ bool board_t::is_square_attacked(int square, int color) const
 
 bool board_t::is_king_attacked(int color) const
 {
-	const int k = std::countr_zero(squares<king>(color));
+	const int k = lsb(squares<king>(color));
 	return is_square_attacked(k, !color);
 }
 
@@ -88,7 +88,7 @@ uint64_t board_t::hash() const
 	for (int color = 0; color < 2; ++color)
 		for (int piece = 0; piece < 6; ++piece)
 			for (uint64_t b = colors[color] & pieces[piece]; b; b &= b - 1)
-				hash_piece(key, color, piece, std::countr_zero(b));
+				hash_piece(key, color, piece, lsb(b));
 
 	hash_turn(key, turn);
 	hash_castle(key, castle);

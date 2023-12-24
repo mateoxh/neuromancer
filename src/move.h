@@ -13,8 +13,15 @@ public:
 	int to() const;
 	int promo() const;
 
-	bool operator==(const move_t&) const = default;
-	bool operator!=(const move_t&) const = default;
+	bool operator==(const move_t& other)
+	{
+		return move == other.move;
+	}
+
+	bool operator!=(const move_t& other)
+	{
+		return move != other.move;
+	}
 
 private:
 	uint16_t move;

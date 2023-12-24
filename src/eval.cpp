@@ -19,48 +19,48 @@ constexpr std::array<int, 64> bare_king = {
 template<int piece>
 int mobility(uint64_t mob, uint64_t dan)
 {
-	return std::popcount(mob) * weight[piece] + value[piece]
-		+  std::popcount(dan) * danger[piece];
+	return popcount(mob) * weight[piece] + value[piece]
+		+  popcount(dan) * danger[piece];
 }
 
 template<int color>
 int evaluate(const board_t& board)
 {
-	const int opk = std::countr_zero(board.squares<king>(!color));
+	const int opk = lsb(board.squares<king>(!color));
 	const uint64_t opkzone = single_attacks<king>(opk);
 
 	uint64_t b, mob;
 	int from, eval = 0;
 
-	if (std::popcount(board.squares<knight, bishop, rook, queen>(!color)) < 3)
+	if (popcount(board.squares<knight, bishop, rook, queen>(!color)) < 3)
 		eval += bare_king[opk];
 
 	for (b = board.squares<knight>(color); b; b &= b - 1) {
-		from = std::countr_zero(b);
+		from = lsb(b);
 		mob  = single_attacks<knight>(from);
 		eval += mobility<knight>(mob, mob & opkzone);
 	}
 
 	for (b = board.squares<bishop>(color); b; b &= b - 1) {
-		from = std::countr_zero(b);
+		from = lsb(b);
 		mob  = single_attacks<bishop>(from, board.occupancy());
 		eval += mobility<bishop>(mob, mob & opkzone);
 	}
 
 	for (b = board.squares<rook>(color); b; b &= b - 1) {
-		from = std::countr_zero(b);
+		from = lsb(b);
 		mob  = single_attacks<rook>(from, board.occupancy());
 		eval += mobility<rook>(mob, mob & opkzone);
 	}
 
 	for (b = board.squares<queen>(color); b; b &= b - 1) {
-		from = std::countr_zero(b);
+		from = lsb(b);
 		mob  = single_attacks<queen>(from, board.occupancy());
 		eval += mobility<queen>(mob, mob & opkzone);
 	}
 
 	b = board.squares<pawn>(color);
-	eval += std::popcount(b) * value[pawn];
+	eval += popcount(b) * value[pawn];
 
 	return eval;
 }
