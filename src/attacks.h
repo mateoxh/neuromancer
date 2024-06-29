@@ -31,14 +31,19 @@ constexpr uint64_t multiple_attacks(uint64_t b, [[ maybe_unused ]] uint64_t o = 
 	}
 }
 
-inline constexpr std::array<std::array<uint64_t, 64>, 6> empty_attacks = {
-	make_table([] (uint64_t  ) { return 0; }),
-	make_table([] (uint64_t b) { return multiple_attacks<knight>(b); }),
-	make_table([] (uint64_t b) { return multiple_attacks<bishop>(b); }),
-	make_table([] (uint64_t b) { return multiple_attacks<rook  >(b); }),
-	make_table([] (uint64_t b) { return multiple_attacks<queen >(b); }),
-	make_table([] (uint64_t b) { return multiple_attacks<king  >(b); }),
-};
+template<typename Func>
+consteval auto make_table(Func&& func)
+{
+	std::array<uint64_t, 64> ret = {};
+	for (size_t i = 0; i < 64; ++i)
+		ret[i] = func(1ull << i);
+	return ret;
+}
+
+template<int piece>
+inline constexpr auto empty_attacks = make_table([] (uint64_t b) {
+			return multiple_attacks<piece>(b);
+		});
 
 inline constexpr std::array<std::array<uint64_t, 64>, 4> dir_masks = {
 	make_table([] (uint64_t b) { return fill<north_east, south_west>(b); }),
@@ -63,7 +68,7 @@ constexpr uint64_t sliding_attack(int s, uint64_t o)
 template<int piece>
 constexpr uint64_t single_attacks(int s)
 {
-	return empty_attacks[piece][s];
+	return empty_attacks<piece>[s];
 }
 
 template<int piece>

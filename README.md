@@ -4,7 +4,7 @@ Neuromancer is a chess engine compatible with the UCI protocol.
 
 ## Installing
 
-To build the program you need a compiler that supports the C++17 standard.
+To build the program you need a compiler that supports the C++20 standard.
 
 After downloading the sources run these commands
 

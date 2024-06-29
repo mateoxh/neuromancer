@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <bit>
 
 constexpr int white = 0;
 constexpr int black = 1;
@@ -86,17 +87,6 @@ constexpr uint64_t fill(uint64_t b, uint64_t o = 0)
 	return (... | shift<delta>(occluded_fill<delta>(b, o)));
 }
 
-template<typename Func>
-constexpr auto make_table(Func&& func)
-{
-	std::array<uint64_t, 64> ret = {};
-
-	for (size_t i = 0; i < 64; ++i)
-		ret[i] = func(1ull << i);
-
-	return ret;
-}
-
-constexpr int popcount(uint64_t b) { return __builtin_popcountll(b); }
-constexpr int lsb(uint64_t b) { return __builtin_ctzll(b); }
-constexpr int msb(uint64_t b) { return __builtin_clzll(b); }
+constexpr int popcount(uint64_t b) { return std::popcount(b); }
+constexpr int lsb(uint64_t b) { return std::countr_zero(b); }
+constexpr int msb(uint64_t b) { return std::countl_zero(b); }

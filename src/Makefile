@@ -1,5 +1,5 @@
 CC = g++
-SFLAGS = -Wall -Wextra -Wpedantic -std=c++17
+SFLAGS = -Wall -Wextra -Wpedantic -std=c++20
 OFLAGS = -O3 -march=native -flto -DNDEBUG
 LFLAGS = -lpthread
 SRC = $(wildcard *.cpp)
