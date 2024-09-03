@@ -17,6 +17,12 @@ struct undo_t {
 };
 
 class board_t {
+	std::array<uint64_t, 6> pieces;
+	std::array<uint64_t, 2> colors;
+	int8_t turn;
+	int8_t ep_square;
+	int8_t castle;
+
 public:
 	void parse_fen(const std::string& fen);
 
@@ -44,13 +50,6 @@ public:
 
 	template<int...piece> uint64_t squares() const;
 	template<int...piece> uint64_t squares(int color) const;
-
-private:
-	std::array<uint64_t, 6> pieces;
-	std::array<uint64_t, 2> colors;
-	int8_t turn;
-	int8_t ep_square;
-	int8_t castle;
 };
 
 template<int...piece>

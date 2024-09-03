@@ -16,15 +16,25 @@ using pv_t = std::vector<move_t>;
 using tc_t = std::chrono::high_resolution_clock;
 
 struct info_t {
-	void reset();
-	void report(const pv_t& pv, int depth, int score);
-
 	tc_t::time_point start;
 	move_t prev_best;
 	int64_t nodes;
+
+	void reset();
+	void report(const pv_t& pv, int depth, int score);
 };
 
 class searcher_t {
+	std::atomic<bool> stop;
+	tc_t::time_point max_time;
+	int max_depth;
+	bool infinite;
+
+	ttable_t tt;
+	history_t history;
+
+	std::vector<uint64_t> game_history;
+
 public:
 	void reset();
 	void prepare(long msec, int depth);
@@ -38,15 +48,4 @@ public:
 
 	void update_game_history(const board_t& board);
 	bool is_repetition(uint64_t hash) const;
-
-private:
-	std::atomic<bool> stop;
-	tc_t::time_point max_time;
-	int max_depth;
-	bool infinite;
-
-	ttable_t tt;
-	history_t history;
-
-	std::vector<uint64_t> game_history;
 };

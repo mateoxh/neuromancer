@@ -225,7 +225,7 @@ int searcher_t::negamax(board_t& board, info_t& info, pv_t& pv, int alpha, int b
 			return 0;
 
 		if (score >= beta) {
-			tt.store(hash, move, score_to_tt(beta, ply), depth, lower_bound);
+			tt.store(hash, score_to_tt(beta, ply), move, depth, lower_bound);
 
 			if (!board.is_capture(move))
 				history.add(board, move, depth);
@@ -246,7 +246,7 @@ int searcher_t::negamax(board_t& board, info_t& info, pv_t& pv, int alpha, int b
 	if (move_count == 0)
 		return in_check ? -mate + ply : 0;
 
-	tt.store(hash, best_move, score_to_tt(alpha, ply), depth, bound);
+	tt.store(hash, score_to_tt(alpha, ply), best_move, depth, bound);
 
 	return alpha;
 }

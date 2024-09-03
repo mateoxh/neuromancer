@@ -5,10 +5,9 @@
 #include "search.h"
 
 class engine_t {
-public:
-	engine_t();
+	board_t board;
+	searcher_t searcher;
 
-	void start();
 	void uci();
 	void isready();
 	void ucinewgame();
@@ -17,7 +16,7 @@ public:
 	void go(std::stringstream& ss);
 	void setoption(std::stringstream& ss);
 
-private:
-	board_t board;
-	searcher_t searcher;
+public:
+	engine_t();
+	void start();
 };

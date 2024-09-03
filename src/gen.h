@@ -5,6 +5,8 @@
 #include "board.h"
 
 class scored_move_t : public move_t {
+	int score;
+
 public:
 	using move_t::move_t;
 
@@ -17,9 +19,6 @@ public:
 	{
 		return score < other.score;
 	}
-
-private:
-	int score;
 };
 
 using movelist_t = std::vector<scored_move_t>;

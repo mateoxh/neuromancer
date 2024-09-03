@@ -2,6 +2,8 @@
 
 ttable_t::ttable_t(size_t mb)
 {
+    static_assert(sizeof(slot_t) == 16);
+
 	resize(mb);
 	clear();
 }
@@ -37,7 +39,7 @@ slot_t& ttable_t::get(uint64_t hash)
 	return table[index(hash)];
 }
 
-void ttable_t::store(uint64_t hash, move_t move, int score, int depth, int bound)
+void ttable_t::store(uint64_t hash, int score, move_t move, int depth, int bound)
 {
-	get(hash) = { hash, move, score, uint8_t(depth), uint8_t(bound) };
+	get(hash) = { hash, score, move, uint8_t(depth), uint8_t(bound) };
 }

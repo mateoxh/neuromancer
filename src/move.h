@@ -4,27 +4,40 @@
 #include <cstdint>
 
 class move_t {
+    uint16_t move;
+
 public:
-	move_t() = default;
-	move_t(int from, int to);
-	move_t(int from, int to, int promo);
+    move_t()
+        : move()
+    {
+    }
 
-	int from() const;
-	int to() const;
-	int promo() const;
+    move_t(int from, int to)
+        : move(from | to << 6)
+    {
+    }
 
-	bool operator==(const move_t& other)
-	{
-		return move == other.move;
-	}
+    move_t(int from, int to, int promo)
+        : move(from | to << 6 | promo << 12)
+    {
+    }
 
-	bool operator!=(const move_t& other)
-	{
-		return move != other.move;
-	}
+    int from() const
+    {
+        return move & 63;
+    }
 
-private:
-	uint16_t move;
+    int to() const
+    {
+        return (move >> 6) & 63;
+    }
+
+    int promo() const
+    {
+        return move >> 12;
+    }
+
+    bool operator==(const move_t&) const = default;
 };
 
 std::ostream& operator<<(std::ostream& os, move_t move);
