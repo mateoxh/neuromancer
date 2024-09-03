@@ -19,6 +19,7 @@ struct undo_t {
 class board_t {
 	std::array<uint64_t, 6> pieces;
 	std::array<uint64_t, 2> colors;
+	std::array<int8_t, 64> lookup;
 	int8_t turn;
 	int8_t ep_square;
 	int8_t castle;

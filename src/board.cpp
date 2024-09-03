@@ -43,12 +43,7 @@ bool board_t::in_check() const
 
 int board_t::piece_at(int square) const
 {
-	for (int p = 0; p < 6; ++p) {
-		if (pieces[p] & (1ull << square))
-			return p;
-	}
-
-	return -1;
+	return lookup[square];
 }
 
 int board_t::stm() const
@@ -104,6 +99,8 @@ void board_t::parse_fen(const std::string& fen)
 	int square = 56;
 
 	*this = {};
+	for (auto& p : lookup)
+		p = -1;
 
 	ss >> token;
 	for (auto c : token) {
@@ -117,6 +114,7 @@ void board_t::parse_fen(const std::string& fen)
 
 			pieces[piece] |= 1ull << square;
 			colors[color] |= 1ull << square;
+			lookup[square] = piece;
 			++square;
 		}
 	}
@@ -198,6 +196,24 @@ bool board_t::play(move_t move, undo_t& undo)
 
 	execute(move, turn, mpiece, cpiece);
 
+	lookup[from] = -1;
+	lookup[to] = mpiece;
+	if (mpiece == pawn) {
+		const int ppiece = move.promo();
+		if (ppiece) {
+			lookup[to] = ppiece;
+		} else if (to == ep_square) {
+			lookup[to ^ 8] = -1;
+		}
+	} else if (mpiece == king) {
+		if (std::abs(from - to) == 2) {
+			const int rfrom = from < to ? (from + 3) : (from - 4);
+			const int rto	= from < to ? (from + 1) : (from - 1);
+			lookup[rfrom] = -1;
+			lookup[rto] = rook;
+		}
+	}
+
 	undo.cpiece = cpiece;
 	undo.ep_square = ep_square;
 	undo.castle = castle;
@@ -217,6 +233,7 @@ bool board_t::play(move_t move, undo_t& undo)
 
 void board_t::takeback(move_t move, const undo_t& undo)
 {
+	const int from = move.from();
 	const int to = move.to();
 
 	const int mpiece = move.promo() ? pawn : piece_at(to);
@@ -227,6 +244,24 @@ void board_t::takeback(move_t move, const undo_t& undo)
 	turn = !turn;
 
 	execute(move, turn, mpiece, cpiece);
+
+	lookup[to] = cpiece;
+	lookup[from] = mpiece;
+	if (mpiece == pawn) {
+		const int ppiece = move.promo();
+		if (ppiece) {
+			lookup[from] = pawn;
+		} else if (to == ep_square) {
+			lookup[to ^ 8] = pawn;
+		}
+	} else if (mpiece == king) {
+		if (std::abs(from - to) == 2) {
+			const int rfrom = from < to ? (from + 3) : (from - 4);
+			const int rto	= from < to ? (from + 1) : (from - 1);
+			lookup[rfrom] = rook;
+			lookup[rto] = -1;
+		}
+	}
 }
 
 void board_t::play_null(undo_t& undo)
