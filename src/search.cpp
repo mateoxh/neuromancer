@@ -160,7 +160,7 @@ int searcher_t::negamax(board_t& board, info_t& info, pv_t& pv, int alpha, int b
 	++info.nodes;
 
 	const uint64_t hash = board.hash();
-	const slot_t& s = tt.get(hash);
+	const slot_t s = tt.get(hash);
 
 	int score, move_count = 0, bound = upper_bound;
 
